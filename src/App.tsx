@@ -1,32 +1,73 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import * as C from "./app.styles";
-import logoImage from './assets/devmemory_logo.png'
-import RestartIcon from './assets/svgs/restart.svg'
+import logoImage from "./assets/devmemory_logo.png";
+import RestartIcon from "./assets/svgs/restart.svg";
 
 import Button from "./components/Button";
 import InfoItem from "./components/InfoItem";
+import { GridItemType } from "./types/GridItemType";
+
+import { items } from "./data/items";
 
 const App: React.FC = () => {
+  const [playing, setPlaying] = useState<boolean>(false);
+  const [timeElapsed, setTimeElapsed] = useState<number>(0);
+  const [moveCount, setMoveCount] = useState<number>(0);
+  const [shownCount, setShownCount] = useState<number>(0);
+  const [gridItems, setGridItems] = useState<GridItemType[]>([]);
 
   const resetAndCreateGrid = () => {
+    setTimeElapsed(0);
+    setMoveCount(0);
+    setShownCount(0);
 
-  }
+    let tmpGrid: GridItemType[] = [];
+    for (let i = 0; i < items.length * 2; i++) {
+      tmpGrid.push({
+        item: null,
+        shown: false,
+        permanentShown: false,
+      });
+    }
+  
+    for(let w = 0; w < 2; w++){
+      for(let i = 0; i< items.length; i++){
+        let pos = -1;
+        while(pos < 0 || tmpGrid[pos].item !== null) {
+          pos = Math.floor(Math.random() * (items.length * 2))
+        }
+        tmpGrid[pos].item = i;
+      }
+    }
+
+    setGridItems(tmpGrid);
+
+    setPlaying(true);
+  };
+
+  useEffect(() => resetAndCreateGrid(), []);
 
   return (
     <C.Container>
       <C.Info>
         <C.LogoLink href="">
-          <img src={logoImage} width='200' alt='' />
+          <img src={logoImage} width="200" alt="" />
         </C.LogoLink>
         <C.InfoArea>
           <InfoItem label="Tempo" value="00:00" />
           <InfoItem label="Movimentos" value="0" />
         </C.InfoArea>
 
-        <Button label="Reiniciar" icon={RestartIcon} onClick={resetAndCreateGrid} />
+        <Button
+          label="Reiniciar"
+          icon={RestartIcon}
+          onClick={resetAndCreateGrid}
+        />
       </C.Info>
-      <C.GridArea></C.GridArea>
+      <C.GridArea>
+        <C.Grid></C.Grid>
+      </C.GridArea>
     </C.Container>
   );
 };
