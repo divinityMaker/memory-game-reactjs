@@ -9,6 +9,7 @@ import InfoItem from "./components/InfoItem";
 import { GridItemType } from "./types/GridItemType";
 
 import { items } from "./data/items";
+import GridItem from "./components/GridItem";
 
 const App: React.FC = () => {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -46,6 +47,10 @@ const App: React.FC = () => {
     setPlaying(true);
   };
 
+  const handleItemClick = (index: number) => {
+    
+  }
+
   useEffect(() => resetAndCreateGrid(), []);
 
   return (
@@ -66,7 +71,17 @@ const App: React.FC = () => {
         />
       </C.Info>
       <C.GridArea>
-        <C.Grid></C.Grid>
+        <C.Grid>
+          {gridItems.map((item, index) => {
+            return (
+              <GridItem 
+                key={index} 
+                item={item}
+                onClick={() => handleItemClick(index)}
+              />
+            )
+          })}
+        </C.Grid>
       </C.GridArea>
     </C.Container>
   );
