@@ -10,6 +10,7 @@ import { GridItemType } from "./types/GridItemType";
 
 import { items } from "./data/items";
 import GridItem from "./components/GridItem";
+import { formatTimeElapsed } from "./utils/formatTimeElapsed";
 
 const App: React.FC = () => {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -31,12 +32,12 @@ const App: React.FC = () => {
         permanentShown: false,
       });
     }
-  
-    for(let w = 0; w < 2; w++){
-      for(let i = 0; i< items.length; i++){
+
+    for (let w = 0; w < 2; w++) {
+      for (let i = 0; i < items.length; i++) {
         let pos = -1;
-        while(pos < 0 || tmpGrid[pos].item !== null) {
-          pos = Math.floor(Math.random() * (items.length * 2))
+        while (pos < 0 || tmpGrid[pos].item !== null) {
+          pos = Math.floor(Math.random() * (items.length * 2));
         }
         tmpGrid[pos].item = i;
       }
@@ -47,11 +48,16 @@ const App: React.FC = () => {
     setPlaying(true);
   };
 
-  const handleItemClick = (index: number) => {
-    
-  }
+  const handleItemClick = (index: number) => {};
 
   useEffect(() => resetAndCreateGrid(), []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (playing) setTimeElapsed((state) => state + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [playing, timeElapsed]);
 
   return (
     <C.Container>
@@ -60,7 +66,7 @@ const App: React.FC = () => {
           <img src={logoImage} width="200" alt="" />
         </C.LogoLink>
         <C.InfoArea>
-          <InfoItem label="Tempo" value="00:00" />
+          <InfoItem label="Tempo" value={formatTimeElapsed(timeElapsed)} />
           <InfoItem label="Movimentos" value="0" />
         </C.InfoArea>
 
@@ -74,12 +80,12 @@ const App: React.FC = () => {
         <C.Grid>
           {gridItems.map((item, index) => {
             return (
-              <GridItem 
-                key={index} 
+              <GridItem
+                key={index}
                 item={item}
                 onClick={() => handleItemClick(index)}
               />
-            )
+            );
           })}
         </C.Grid>
       </C.GridArea>
