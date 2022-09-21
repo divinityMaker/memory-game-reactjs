@@ -21,5 +21,5 @@ export const Container = styled.div<ContainerProps>`
 export const Icon = styled.img<IconProps>`
     width: 40px;
     height: 40px;
-    opacity: ${props => props.opacity ?? 1 };
+    opacity: ${props => props.opacity ?? 1};
 `
