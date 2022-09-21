@@ -48,7 +48,18 @@ const App: React.FC = () => {
     setPlaying(true);
   };
 
-  const handleItemClick = (index: number) => {};
+  const handleItemClick = (index: number) => {
+    if (playing && index !== null && shownCount < 2) {
+      let tmpGrid = [...gridItems];
+
+      if (!tmpGrid[index].permanentShown && !tmpGrid[index].shown) {
+        tmpGrid[index].shown = true;
+        setShownCount((state) => state + 1);
+      }
+
+      setGridItems(tmpGrid);
+    }
+  };
 
   useEffect(() => resetAndCreateGrid(), []);
 
