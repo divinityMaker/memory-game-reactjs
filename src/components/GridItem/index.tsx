@@ -12,8 +12,13 @@ interface Props {
 
 const GridItem: React.FC<Props> = ({ item, onClick }) => {
   return (
-    <C.Container onClick={onClick}>
-      {!item.permanentShown && !item.shown && <C.Icon src={b7Svg} alt="" />}
+    <C.Container
+      onClick={onClick}
+      showBackGround={item.permanentShown || item.shown}
+    >
+      {!item.permanentShown && !item.shown && (
+        <C.Icon src={b7Svg} alt="" opacity={0.1} />
+      )}
       {(item.permanentShown || item.shown) && item.item !== null && (
         <C.Icon src={items[item.item].icon} alt="" />
       )}
